@@ -1,0 +1,9 @@
+Screen {
+    layout: vertical;
+}
+
+#output {
+    height: 1fr;
+    border: solid green;
+    padding: 1;
+}

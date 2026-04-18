@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hipy"
+version = "0.1.0"
+description = "A cool music companion"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "IAC-3" },
+]
+dependencies = [
+    "textual>=3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "textual-dev>=1.0",
+]
+
+[project.urls]
+Repository = "https://github.com/IAC-3/HiPy"
+
+[tool.setuptools.packages.find]
+where = ["src"]
