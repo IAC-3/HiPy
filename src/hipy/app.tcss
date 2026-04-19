@@ -2,8 +2,60 @@ Screen {
     layout: vertical;
 }
 
-#output {
+#toolbar {
+    height: auto;
+    padding: 1;
+    background: $surface;
+    border-bottom: solid $surface-lighten-2;
+}
+
+#toolbar Button {
+    margin-right: 1;
+}
+
+#picker-buttons{
+    width:auto;
+    height:auto;
+}
+#main-area {
     height: 1fr;
-    border: solid green;
+}
+
+#sidebar {
+    width: 20;
+    border-right: solid $surface-lighten-2;
     padding: 1;
 }
+
+#content {
+    width: 1fr;
+    padding: 1;
+}
+
+#preview {
+    height: 1fr;
+    content-align: center middle;
+}
+
+.image-item {
+    height: auto;
+    margin: 1 2;
+}
+
+.image-item:hover {
+    background: $boost;
+}
+
+
+DirectoryPickerScreen {
+        align: center middle;
+    }
+    #picker-container {
+        width: 60;
+        height: 80%;
+        background: $surface;
+        padding: 1;
+    }
+    #picker-container DirectoryTree {
+        height: 1fr;
+    }

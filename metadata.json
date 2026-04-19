@@ -1,0 +1,202 @@
+{
+  "tracks": [
+    {
+      "track_type": "General",
+      "count": "350",
+      "count_of_stream_of_this_kind": "1",
+      "kind_of_stream": "General",
+      "other_kind_of_stream": [
+        "General"
+      ],
+      "stream_identifier": "0",
+      "count_of_audio_streams": "1",
+      "count_of_image_streams": "1",
+      "audio_format_list": "MPEG Audio",
+      "audio_format_withhint_list": "MPEG Audio",
+      "audio_codecs": "MPEG Audio",
+      "audio_channels_total": "2",
+      "image_format_list": "JPEG",
+      "image_format_withhint_list": "JPEG",
+      "codecs_image": "JPEG",
+      "complete_name": "src/song.mp3",
+      "folder_name": "src",
+      "file_name_extension": "song.mp3",
+      "file_name": "song",
+      "file_extension": "mp3",
+      "format": "MPEG Audio",
+      "other_format": [
+        "MPEG Audio"
+      ],
+      "format_extensions_usually_used": "m1a mpa mpa1 mp1 m2a mpa2 mp2 mp3",
+      "commercial_name": "MPEG Audio",
+      "internet_media_type": "audio/mpeg",
+      "file_size": 4478703,
+      "other_file_size": [
+        "4.27 MiB",
+        "4 MiB",
+        "4.3 MiB",
+        "4.27 MiB",
+        "4.271 MiB"
+      ],
+      "duration": 274272,
+      "other_duration": [
+        "4 min 34 s",
+        "4 min 34 s 272 ms",
+        "4 min 34 s",
+        "00:04:34.272",
+        "00:04:34.272"
+      ],
+      "overall_bit_rate": 128000,
+      "other_overall_bit_rate": [
+        "128 kb/s"
+      ],
+      "stream_size": 89967,
+      "other_stream_size": [
+        "87.9 KiB (2%)",
+        "88 KiB",
+        "88 KiB",
+        "87.9 KiB",
+        "87.86 KiB",
+        "87.9 KiB (2%)"
+      ],
+      "proportion_of_this_stream": "0.02009",
+      "title": "I Found",
+      "album": "5AM (Expanded Edition)",
+      "album_performer": "Amber Run",
+      "part_position": "1",
+      "part_total": "1",
+      "track_name": "I Found",
+      "track_name_position": "1",
+      "track_name_total": "17",
+      "performer": "Amber Run",
+      "encoded_by": "RCA Records Label",
+      "recorded_date": "2015-04-20",
+      "file_creation_date": "2025-09-04 15:06:36 UTC",
+      "file_creation_date__local": "2025-09-04 17:06:36",
+      "file_last_modification_date": "2026-04-19 08:17:42 UTC",
+      "file_last_modification_date__local": "2026-04-19 10:17:42",
+      "writing_library": "Lavf61.7.100",
+      "other_writing_library": [
+        "Lavf61.7.100"
+      ],
+      "isrc": "GBARL1400303",
+      "copyright": "(P) 2015 Sony Music Entertainment UK Limited",
+      "cover": "Yes",
+      "cover_description": "Cover",
+      "cover_type": "Cover (front)",
+      "cover_mime": "image/jpeg",
+      "lyrics": "[Verse 1] / And I'll use you as a warning sign / That if you talk enough sense, then you'll lose your mind / And I'll use you as a focal point / So I don\u2019t lose sight of what I want / And I've moved further than I thought I could / But I missed you more than I thought I would / And I'll use you as a warning sign / That if you talk enough sense, then you'll lose your mind /  / [Chorus] / Oh, and I found love where it wasn't supposed to be / Right in front of me, talk some sense to me / And I found love where it wasn't supposed to be / Right in front of me, talk some sense to me /  / [Verse 2] / And I'll use you as a makeshift gauge / Of how much to give and how much to take / Oh, I'll use you as a warning sign / That if you talk enough sense, then you'll lose your mind /  / [Chorus] / Oh, and I found love where it wasn't supposed to be / Right in front of me, talk some sense to me / And I found love where it wasn't supposed to be / Right in front of me, talk some sense to me /  /  / [Chorus] / Oh, and I found love where it wasn't supposed to be / Right in front of me, talk some sense to me / And I found love where it wasn't supposed to be / Right in front of me, talk some sense to me",
+      "comment": "https://music.youtube.com/watch?v=szJQ0d7WOZ8",
+      "official_audio_source_webpage": "https://open.spotify.com/track/5zT5cMnMKoyruPj13TQXGx"
+    },
+    {
+      "track_type": "Audio",
+      "count": "285",
+      "count_of_stream_of_this_kind": "1",
+      "kind_of_stream": "Audio",
+      "other_kind_of_stream": [
+        "Audio"
+      ],
+      "stream_identifier": "0",
+      "format": "MPEG Audio",
+      "other_format": [
+        "MPEG Audio"
+      ],
+      "commercial_name": "MPEG Audio",
+      "format_version": "Version 1",
+      "format_profile": "Layer 3",
+      "format_settings": "Joint stereo",
+      "mode": "Joint stereo",
+      "internet_media_type": "audio/mpeg",
+      "duration": 274272,
+      "other_duration": [
+        "4 min 34 s",
+        "4 min 34 s 272 ms",
+        "4 min 34 s",
+        "00:04:34.272",
+        "00:04:34.272"
+      ],
+      "bit_rate_mode": "CBR",
+      "other_bit_rate_mode": [
+        "Constant"
+      ],
+      "bit_rate": 128000,
+      "other_bit_rate": [
+        "128 kb/s"
+      ],
+      "channel_s": 2,
+      "other_channel_s": [
+        "2 channels"
+      ],
+      "samples_per_frame": "1152",
+      "sampling_rate": 48000,
+      "other_sampling_rate": [
+        "48.0 kHz"
+      ],
+      "samples_count": "13165056",
+      "frame_rate": "41.667",
+      "other_frame_rate": [
+        "41.667 FPS (1152 SPF)"
+      ],
+      "frame_count": "11428",
+      "compression_mode": "Lossy",
+      "other_compression_mode": [
+        "Lossy"
+      ],
+      "stream_size": 4388352,
+      "other_stream_size": [
+        "4.19 MiB (98%)",
+        "4 MiB",
+        "4.2 MiB",
+        "4.19 MiB",
+        "4.185 MiB",
+        "4.19 MiB (98%)"
+      ],
+      "proportion_of_this_stream": "0.97983"
+    },
+    {
+      "track_type": "Image",
+      "count": "166",
+      "count_of_stream_of_this_kind": "1",
+      "kind_of_stream": "Image",
+      "other_kind_of_stream": [
+        "Image"
+      ],
+      "stream_identifier": "0",
+      "format": "JPEG",
+      "other_format": [
+        "JPEG"
+      ],
+      "commercial_name": "JPEG",
+      "internet_media_type": "image/jpeg",
+      "width": 640,
+      "other_width": [
+        "640 pixels"
+      ],
+      "height": 640,
+      "other_height": [
+        "640 pixels"
+      ],
+      "color_space": "YUV",
+      "chroma_subsampling": "4:4:4",
+      "bit_depth": 8,
+      "other_bit_depth": [
+        "8 bits"
+      ],
+      "compression_mode": "Lossy",
+      "other_compression_mode": [
+        "Lossy"
+      ],
+      "stream_size": 81549,
+      "other_stream_size": [
+        "79.6 KiB (2%)",
+        "80 KiB",
+        "80 KiB",
+        "79.6 KiB",
+        "79.64 KiB",
+        "79.6 KiB (2%)"
+      ],
+      "proportion_of_this_stream": "0.01821"
+    }
+  ]
+}
