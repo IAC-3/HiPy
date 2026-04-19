@@ -3,3 +3,9 @@
     border: round $surface-lighten-2;
     align: center middle;
 }
+
+#waveform {
+    width: 100%;
+    height: 10;
+    margin: 1 0;
+}

@@ -8,12 +8,17 @@ from PIL import Image
 from rich_pixels import Pixels
 from mutagen.id3 import ID3
 from mutagen.mp3 import MP3
+import librosa
+import numpy as np
+
+
 
 musicExtensions = [".mp3", ".flac", ".wav", ".alac", ".dsd", ".aac", ".ogg", ".opus"]
 
 def getMetadata(path: str) -> str:
     mi = pymediainfo.MediaInfo.parse(path)
     return mi.to_data()
+
 
 
 
@@ -79,6 +84,19 @@ class SongInfo:
         except:
             pass
         return ""
+    
+    def getWaveform(self, num_points=200):
+        y, sr = librosa.load(self.path, sr=None, mono=True)
+        if len(y) == 0:
+            return [0.0] * num_points
+        num_points = min(num_points, len(y))
+        chunk_size = len(y) // num_points
+        waveform = np.array([
+            np.max(np.abs(y[i * chunk_size:(i + 1) * chunk_size]))
+            for i in range(num_points)
+        ])
+        waveform = waveform / (np.max(waveform) + 1e-10)
+        return waveform.tolist()
     
     def isLossless(self) -> bool:
         format = self.getGeneralInfo().get("format", "").lower()
