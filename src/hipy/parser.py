@@ -24,17 +24,6 @@ def Directory_parser(path: str) -> None:
                 song_info = Song_info(song_path)
                 Song_library.add_song(song_info)
 
-class Song_library:
-    songs: list[Song_info] = []
-
-    @classmethod
-    def add_song(cls, song: Song_info) -> None:
-        cls.songs.append(song)
-    
-    @classmethod
-    def remove_song(cls, song: Song_info) -> None:
-        cls.songs.remove(song)
-
 
 class Song_info:
 
@@ -52,17 +41,64 @@ class Song_info:
         return self.metadata.get("tracks", [{}])[1]
     
     def get_image_cover_small(self) -> Pixels:
-        audio = ID3(str(self.path))
-        for tag in audio.values():
-            if tag.FrameID == "APIC":
-                image = Image.open(io.BytesIO(tag.data))
-                image = image.resize((8, 8))
-                return Pixels.from_image(image)
+        try:
+            audio = ID3(str(self.path))
+            for tag in audio.values():
+                if tag.FrameID == "APIC":
+                    image = Image.open(io.BytesIO(tag.data))
+                    image = image.resize((8, 8))
+                    return Pixels.from_image(image)
+        except:
+            pass
+        return None
     
     def get_image_cover_large(self) -> Pixels:
-        audio = ID3(str(self.path))
-        for tag in audio.values():
-            if tag.FrameID == "APIC":
-                image = Image.open(io.BytesIO(tag.data))
-                image = image.resize((64, 64))
-                return Pixels.from_image(image)
+        try:
+            audio = ID3(str(self.path))
+            for tag in audio.values():
+                if tag.FrameID == "APIC":
+                    image = Image.open(io.BytesIO(tag.data))
+                    image = image.resize((64, 64))
+                    return Pixels.from_image(image)
+        except:
+            pass
+        return None
+    
+    def get_lyrics(self) -> str:
+        try:
+            audio = ID3(str(self.path))
+            for tag in audio.values():
+                if tag.FrameID == "USLT":
+                    return tag.text
+        except:
+            pass
+        return ""
+    
+    def is_lossless(self) -> bool:
+        format = self.get_general_info().get("format", "").lower()
+        return format in ["flac", "wav", "alac", "dsd"]
+    
+    def is_native(self) -> bool:
+        # Da definire: forse se è in formato originale senza conversione
+        # Per ora, assumiamo True se lossless
+        return self.is_lossless()
+    
+    def is_trusted_source(self) -> bool:
+        # Flag manuale, per ora False
+        return False
+    
+    def get_evaluation(self) -> float:
+        # Campo da implementare, per ora 0.0
+        return 0.0
+
+
+class Song_library:
+    songs: list[Song_info] = []
+
+    @classmethod
+    def add_song(cls, song: Song_info) -> None:
+        cls.songs.append(song)
+    
+    @classmethod
+    def remove_song(cls, song: Song_info) -> None:
+        cls.songs.remove(song)

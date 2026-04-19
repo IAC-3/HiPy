@@ -55,7 +55,40 @@ class HiPyApp(App):
             for song in Song_library.songs:
                 name = song.get_general_info().get("title", Path(song.path).stem)
                 sidebar.mount(Song_element(song, renderable=name))
-            self.notify(f"Loaded {len(Song_library.songs)} songs")
+            self.export_global_json()
+            self.notify(f"Loaded {len(Song_library.songs)} songs and updated JSON")
+
+    def export_global_json(self):
+        songs_data = []
+        for song in Song_library.songs:
+            general = song.get_general_info()
+            audio = song.get_audio_info()
+            data = {
+                "title": general.get("title", ""),
+                "artist": general.get("performer", ""),
+                "album": general.get("album", ""),
+                "format": general.get("format", ""),
+                "sample_rate": audio.get("sampling_rate", ""),
+                "bit_rate": audio.get("bit_rate", ""),
+                "bit_depth": audio.get("bit_depth", ""),
+                "channels": audio.get("channel_s", ""),
+                "lyrics": song.get_lyrics(),
+                "evaluation": song.get_evaluation(),
+                "lossless": song.is_lossless(),
+                "native": song.is_native(),
+                "trusted_source": song.is_trusted_source(),
+            }
+            songs_data.append(data)
+        
+        # Ordina per titolo
+        songs_data.sort(key=lambda x: x["title"].lower())
+        
+        export_dir = Path("exports")
+        export_dir.mkdir(exist_ok=True)
+        with open(export_dir / "songs.json", "w") as f:
+            json.dump(songs_data, f, indent=4)
+        
+        self.notify(f"Exported {len(songs_data)} songs to exports/songs.json")
 
 
 

@@ -1,6 +1,7 @@
 import sys
 import json
 import io
+import shutil
 from collections.abc import Iterable
 from pathlib import Path
 
@@ -62,8 +63,7 @@ class Song_element(Static):
         super().__init__(renderable, **kwargs)
 
     def on_click(self) -> None:
-        self.app.notify(f"Clicked on {self.song_info.path}")
-        pass
+        self.app.notify(f"Selected: {self.song_info.get_general_info().get('title', Path(self.song_info.path).stem)}")
 
 
 class PathHandler:

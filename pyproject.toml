@@ -13,8 +13,10 @@ authors = [
     { name = "IAC-3" },
 ]
 dependencies = [
-    "textual>=3.0",
+    "textual>=8.0",
     "rich-pixels>=3.0",
+    "pymediainfo>=7.0",
+    "mutagen>=1.47",
 ]
 
 [project.optional-dependencies]
