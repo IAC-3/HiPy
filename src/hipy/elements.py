@@ -9,7 +9,7 @@ from rich_pixels import Pixels
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen
-from textual.widgets import DirectoryTree, Footer, Header, Static, Button
+from textual.widgets import DirectoryTree, Footer, Header, Static, Button, ListView, ListItem, Label
 
 from hipy.parser import Song_info
 
@@ -57,9 +57,9 @@ class FilteredDirectoryTree(DirectoryTree):
 
 class Song_element(Static):
 
-    def __init__(self, song_info: Song_info, **kwargs) -> None:
+    def __init__(self, song_info: Song_info, renderable: str = "", **kwargs) -> None:
         self.song_info = song_info
-        super().__init__(**kwargs)
+        super().__init__(renderable, **kwargs)
 
     def on_click(self) -> None:
         self.app.notify(f"Clicked on {self.song_info.path}")
@@ -76,3 +76,40 @@ class PathHandler:
     @classmethod
     def remove_path(cls, path: Path) -> None:
         cls.paths.remove(path)
+    @classmethod
+    def get_paths(cls) -> list[Path]:
+        return cls.paths
+
+class RemovePathScreen(ModalScreen):
+    BINDINGS = [
+        ("escape", "dismiss", "Back"),
+    ]
+
+    selected_path: Path | None = None
+
+    def compose(self) -> ComposeResult:
+        with Vertical(id="picker-container"):
+            yield Static("Select a path to remove", id="remove-title")
+            yield ListView(
+                *[ListItem(Label(str(p))) for p in PathHandler.paths],
+                id="path-list",
+            )
+            with Horizontal(id="picker-buttons"):
+                yield Button("Remove", id="remove-btn", variant="error")
+                yield Button("Cancel", id="cancel-btn", variant="default")
+
+    def on_list_view_selected(self, event: ListView.Selected) -> None:
+        label = event.item.query_one(Label)
+        self.selected_path = Path(label.content)
+        self.app.notify(f"Selected: {self.selected_path}")
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "remove-btn":
+            if self.selected_path:
+                PathHandler.remove_path(self.selected_path)
+                self.app.notify(f"Removed: {self.selected_path}")
+                self.dismiss(self.selected_path)
+            else:
+                self.app.notify("No path selected")
+        elif event.button.id == "cancel-btn":
+            self.dismiss(None)

@@ -59,3 +59,11 @@ DirectoryPickerScreen {
     #picker-container DirectoryTree {
         height: 1fr;
     }
+
+RemovePathScreen {
+    align: center middle;
+}
+
+#path-list {
+    height: 1fr;
+}
