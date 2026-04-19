@@ -28,7 +28,7 @@ Screen {
 
 #sidebar {
     width: 40;
-    border-right: solid $surface-lighten-2;
+    border: round $surface-lighten-2;
     padding: 1;
 }
 
@@ -37,7 +37,7 @@ Song_element {
     min-height: 5;
     padding: 0;
     margin-bottom: 0;
-    border: solid $surface-lighten-2;
+    border: round $surface-lighten-2;
     background: $surface;
 }
 
@@ -67,6 +67,8 @@ Song_element:hover {
 #content {
     width: 1fr;
     padding: 1;
+    border: round $surface-lighten-2;
+    align: center middle;
 }
 
 #preview {

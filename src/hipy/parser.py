@@ -9,62 +9,68 @@ from rich_pixels import Pixels
 from mutagen.id3 import ID3
 from mutagen.mp3 import MP3
 
-def get_metadata(path: str) -> str:
+musicExtensions = [".mp3", ".flac", ".wav", ".alac", ".dsd", ".aac", ".ogg", ".opus"]
+
+def getMetadata(path: str) -> str:
     mi = pymediainfo.MediaInfo.parse(path)
     return mi.to_data()
 
-# create a parsers that visits a direcotory and finds every .mp3 / .m4a ... file inside it 
-# and inside every subdirectory and creates a Song_info object for each of them and adds it to the Song_library
-
-def Directory_parser(path: str) -> None:
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            if file.endswith((".mp3", ".m4a", ".flac", ".wav")):
-                song_path = os.path.join(root, file)
-                song_info = Song_info(song_path)
-                Song_library.add_song(song_info)
 
 
-class Song_info:
+
+class SongInfo:
 
     def __init__(self, path: str) -> None:
         self.path = path
-        self.metadata = get_metadata(path)
+        self.metadata = getMetadata(path)
     
 
     def __str__(self) -> str:
-        return f"Song_info(path={self.path}, metadata={self.metadata})"
+        return f"SongInfo(path={self.path}, metadata={self.metadata})"
 
-    def get_general_info(self) -> dict:
+    def setTUISideBarElement(self, element) -> None:
+        self.tuiSideBarElement = element
+    
+    def getTUISideBarElement(self):
+        return getattr(self, "tuiSideBarElement", None)
+    
+    def setTUIContentElement(self, element) -> None:
+        self.tuiContentElement = element
+    
+    def getTUIContentElement(self):
+        return getattr(self, "tuiContentElement", None)
+
+    def getGeneralInfo(self) -> dict:
         return self.metadata.get("tracks", [{}])[0]
-    def get_audio_info(self) -> dict:
+    
+    def getAudioInfo(self) -> dict:
         return self.metadata.get("tracks", [{}])[1]
     
-    def get_image_cover_small(self) -> Pixels:
+    def getImageCoverSmall(self) -> Pixels:
         try:
             audio = ID3(str(self.path))
             for tag in audio.values():
                 if tag.FrameID == "APIC":
                     image = Image.open(io.BytesIO(tag.data))
-                    image = image.resize((16, 16))
+                    image = image.resize((8, 8))
                     return Pixels.from_image(image)
         except:
             pass
         return None
     
-    def get_image_cover_large(self) -> Pixels:
+    def getImageCoverLarge(self) -> Pixels:
         try:
             audio = ID3(str(self.path))
             for tag in audio.values():
                 if tag.FrameID == "APIC":
                     image = Image.open(io.BytesIO(tag.data))
-                    image = image.resize((64, 64))
+                    image = image.resize((48, 48))
                     return Pixels.from_image(image)
         except:
             pass
         return None
     
-    def get_lyrics(self) -> str:
+    def getLyrics(self) -> str:
         try:
             audio = ID3(str(self.path))
             for tag in audio.values():
@@ -74,31 +80,45 @@ class Song_info:
             pass
         return ""
     
-    def is_lossless(self) -> bool:
-        format = self.get_general_info().get("format", "").lower()
+    def isLossless(self) -> bool:
+        format = self.getGeneralInfo().get("format", "").lower()
         return format in ["flac", "wav", "alac", "dsd"]
     
-    def is_native(self) -> bool:
+    def isNative(self) -> bool:
         # Da definire: forse se è in formato originale senza conversione
         # Per ora, assumiamo True se lossless
-        return self.is_lossless()
+        return self.isLossless()
     
-    def is_trusted_source(self) -> bool:
+    def isTrustedSource(self) -> bool:
         # Flag manuale, per ora False
         return False
     
-    def get_evaluation(self) -> float:
+    def getEvaluation(self) -> float:
         # Campo da implementare, per ora 0.0
         return 0.0
 
 
-class Song_library:
-    songs: list[Song_info] = []
+class SongLibrary:
+    songs: list[SongInfo] = []
 
     @classmethod
-    def add_song(cls, song: Song_info) -> None:
+    def addSong(cls, song: SongInfo) -> None:
         cls.songs.append(song)
     
     @classmethod
-    def remove_song(cls, song: Song_info) -> None:
+    def addSongsFromDirectory(cls, directory: str) -> None:
+        for root, _, files in os.walk(directory):
+            for file in files:
+                if any(file.lower().endswith(ext) for ext in musicExtensions):
+                    song_path = os.path.join(root, file)
+                    cls.addSong(SongInfo(song_path))
+
+    @classmethod
+    def removeSong(cls, song: SongInfo) -> None:
         cls.songs.remove(song)
+
+    @classmethod
+    def saveLibrary(cls, path: str) -> None:
+        with open(path, "w") as f:
+            json.dump([song.__dict__ for song in cls.songs], f, indent=2)
+
