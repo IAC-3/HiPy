@@ -17,6 +17,7 @@ dependencies = [
     "rich-pixels>=3.0",
     "pymediainfo>=7.0",
     "mutagen>=1.47",
+    "pygame>=2.0",
 ]
 
 [project.optional-dependencies]

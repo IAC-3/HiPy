@@ -6,6 +6,7 @@ mutagen==1.47.0
 pillow==12.2.0
 platformdirs==4.9.6
 Pygments==2.20.0
+pygame==2.6.1
 pymediainfo==7.0.1
 rich==15.0.0
 rich-pixels==3.0.1

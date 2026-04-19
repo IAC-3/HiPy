@@ -46,7 +46,7 @@ class Song_info:
             for tag in audio.values():
                 if tag.FrameID == "APIC":
                     image = Image.open(io.BytesIO(tag.data))
-                    image = image.resize((8, 8))
+                    image = image.resize((16, 16))
                     return Pixels.from_image(image)
         except:
             pass

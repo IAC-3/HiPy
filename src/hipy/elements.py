@@ -56,14 +56,58 @@ class FilteredDirectoryTree(DirectoryTree):
     def filter_paths(self, paths: Iterable[Path]) -> Iterable[Path]:
         return [p for p in paths if not p.name.startswith(".")]
 
-class Song_element(Static):
+class Song_element(Horizontal):
 
-    def __init__(self, song_info: Song_info, renderable: str = "", **kwargs) -> None:
+    def __init__(self, song_info: Song_info, **kwargs) -> None:
         self.song_info = song_info
-        super().__init__(renderable, **kwargs)
+        super().__init__(**kwargs)
+
+    def compose(self):
+        title = self.song_info.get_general_info().get("title", "Unknown Title")
+        artist = self.song_info.get_general_info().get("performer", "Unknown Artist")
+        album = self.song_info.get_general_info().get("album", "Unknown Album")
+        
+        with Vertical(id="song-text"):
+            yield Label(f"[bold]{title}[/bold]", id="song-title")
+            yield Label(f"Album: {album}", id="song-album")
+            yield Label(f"Artist: {artist}", id="song-artist")
+        
+        cover = self.song_info.get_image_cover_small()
+        if cover is None:
+            # Use sample.png
+            from PIL import Image
+            sample_path = Path("assets/sample.png")
+            if sample_path.exists():
+                image = Image.open(sample_path)
+                image = image.resize((16, 16))
+                cover = Pixels.from_image(image)
+            else:
+                cover = Pixels.from_image(Image.new('RGB', (16, 16), color='gray'))
+        
+        yield Static(cover, id="song-cover")
 
     def on_click(self) -> None:
-        self.app.notify(f"Selected: {self.song_info.get_general_info().get('title', Path(self.song_info.path).stem)}")
+        self.app.current_song = self.song_info
+        preview = self.app.query_one("#preview")
+        general = self.song_info.get_general_info()
+        audio = self.song_info.get_audio_info()
+        info = f"""[bold]Title:[/bold] {general.get("title", "Unknown")}
+[bold]Artist:[/bold] {general.get("performer", "Unknown")}
+[bold]Album:[/bold] {general.get("album", "Unknown")}
+[bold]Format:[/bold] {general.get("format", "Unknown")}
+[bold]Sample Rate:[/bold] {audio.get("sampling_rate", "Unknown")}
+[bold]Bit Rate:[/bold] {audio.get("bit_rate", "Unknown")}
+[bold]Bit Depth:[/bold] {audio.get("bit_depth", "Unknown")}
+[bold]Channels:[/bold] {audio.get("channel_s", "Unknown")}
+[bold]Lossless:[/bold] {self.song_info.is_lossless()}
+[bold]Native:[/bold] {self.song_info.is_native()}
+[bold]Trusted Source:[/bold] {self.song_info.is_trusted_source()}
+[bold]Evaluation:[/bold] {self.song_info.get_evaluation()}
+
+[bold]Lyrics:[/bold]
+{self.song_info.get_lyrics()}
+"""
+        preview.update(info)
 
 
 class PathHandler:

@@ -13,6 +13,11 @@ Screen {
     margin-right: 1;
 }
 
+#current-path {
+    color: $text-muted;
+    margin-left: 2;
+}
+
 #picker-buttons{
     width:auto;
     height:auto;
@@ -22,9 +27,41 @@ Screen {
 }
 
 #sidebar {
-    width: 20;
+    width: 40;
     border-right: solid $surface-lighten-2;
     padding: 1;
+}
+
+Song_element {
+    height: auto;
+    min-height: 5;
+    padding: 0;
+    margin-bottom: 0;
+    border: solid $surface-lighten-2;
+    background: $surface;
+}
+
+Song_element:hover {
+    background: $boost;
+}
+
+#song-text {
+    width: 1fr;
+    padding: 0 1;
+}
+
+#song-cover {
+    width: auto;
+    height: auto;
+    padding: 0;
+}
+
+#song-title {
+    color: $text;
+}
+
+#song-album, #song-artist {
+    color: $text-muted;
 }
 
 #content {

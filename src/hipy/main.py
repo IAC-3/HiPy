@@ -1,6 +1,7 @@
 import sys
 import json
 import io
+import pygame
 from collections.abc import Iterable
 from pathlib import Path
 from hipy.elements import FilteredDirectoryTree, DirectoryPickerScreen, PathHandler, RemovePathScreen, Song_element
@@ -10,7 +11,7 @@ from rich_pixels import Pixels
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen
-from textual.widgets import DirectoryTree, Footer, Header, Static, Button
+from textual.widgets import DirectoryTree, Footer, Header, Static, Button, ListView, ListItem, Label
 
 from hipy.parser import Directory_parser, Song_info, Song_library
 
@@ -27,6 +28,8 @@ class HiPyApp(App):
 
     def __init__(self) -> None:
         super().__init__()
+        pygame.mixer.init()
+        self.current_song = None
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -34,6 +37,9 @@ class HiPyApp(App):
             yield Button("Add path", id="Add_path", variant="success")
             yield Button("Remove path", id="Remove_path", variant="error")
             yield Button("Update songs", id="update_songs", variant="primary")
+            yield Button("Play", id="play", variant="default")
+            yield Button("Stop", id="stop", variant="warning")
+            yield Label(self.get_current_path_text(), id="current-path")
         with Horizontal(id="main-area"):
             with VerticalScroll(id="sidebar"):
                 pass
@@ -54,9 +60,36 @@ class HiPyApp(App):
             sidebar.remove_children()
             for song in Song_library.songs:
                 name = song.get_general_info().get("title", Path(song.path).stem)
-                sidebar.mount(Song_element(song, renderable=name))
+                sidebar.mount(Song_element(song))
             self.export_global_json()
+            self.update_path_label()
+            preview = self.query_one("#preview")
+            if Song_library.songs:
+                preview.update("Songs loaded. Click on a song to select it.")
+            else:
+                preview.update("Select a folder to get started")
             self.notify(f"Loaded {len(Song_library.songs)} songs and updated JSON")
+        elif event.button.id == "play":
+            if self.current_song:
+                pygame.mixer.music.load(str(self.current_song.path))
+                pygame.mixer.music.play()
+                self.notify("Playing")
+            else:
+                self.notify("No song selected")
+        elif event.button.id == "stop":
+            pygame.mixer.music.stop()
+            self.notify("Stopped")
+
+    def get_current_path_text(self) -> str:
+        paths = PathHandler.get_paths()
+        if paths:
+            return f"Current path: {paths[0]}"
+        else:
+            return "No path selected"
+    
+    def update_path_label(self):
+        label = self.query_one("#current-path")
+        label.update(self.get_current_path_text())
 
     def export_global_json(self):
         songs_data = []
