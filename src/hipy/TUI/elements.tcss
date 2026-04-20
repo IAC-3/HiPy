@@ -1,9 +1,0 @@
-#song-info{
-    width: 100%;
-}
-
-#waveform {
-    width: 100%;
-    height: 10;
-    margin: 1 0;
-}

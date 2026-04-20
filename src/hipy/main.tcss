@@ -1,4 +1,5 @@
-Screen {
+
+Screen {    
     layout: vertical;
 }
 
@@ -71,7 +72,7 @@ Song_element:hover {
     align: center middle;
 }
 #header-area{
-    height: 2;
+    height: auto;
 }
 #preview {
     height: 1fr;
@@ -105,6 +106,24 @@ RemovePathScreen {
     align: center middle;
 }
 
-#path-list {
+#remove-path-container {
+    width: 60;
+    height: 80%;
+    background: $surface;
+    padding: 1;
+}
+
+#path-selection {
     height: 1fr;
+}
+
+#play-btn,#stop-btn {
+    min-width: 1;
+    width: auto;
+    height: auto;
+    margin: 0 1;
+    padding: 0 1;
+}
+ToolBar {
+    height: auto;
 }

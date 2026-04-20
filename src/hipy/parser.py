@@ -2,6 +2,7 @@ from email.mime import audio
 import io
 import json
 import os
+from pygments.token import String
 import pymediainfo
 from pathlib import Path
 from PIL import Image
@@ -10,6 +11,8 @@ from mutagen.id3 import ID3
 from mutagen.mp3 import MP3
 import librosa
 import numpy as np
+
+DEFAULT_COVER = Path(__file__).parent.parent.parent / "assets" / "sample.png"
 
 
 
@@ -50,7 +53,16 @@ class SongInfo:
     
     def getAudioInfo(self) -> dict:
         return self.metadata.get("tracks", [{}])[1]
-    
+
+    def getBitRateMode(self) -> int:
+        return self.getGeneralInfo().get("overall_bit_rate_mode", "Unknown")
+
+    def getBitRate(self) -> int:
+        return self.getGeneralInfo().get("overall_bit_rate", "Unknown")
+
+    def getSampleRate(self) -> int:
+        return int(self.getAudioInfo().get("sampling_rate", 44100))
+
     def getImageCoverSmall(self) -> Pixels:
         try:
             audio = ID3(str(self.path))
@@ -61,7 +73,7 @@ class SongInfo:
                     return Pixels.from_image(image)
         except:
             pass
-        return None
+        return Pixels.from_image(Image.open(DEFAULT_COVER).resize((8, 8)))
     
     def getImageCoverLarge(self) -> Pixels:
         try:
@@ -73,7 +85,7 @@ class SongInfo:
                     return Pixels.from_image(image)
         except:
             pass
-        return None
+        return Pixels.from_image(Image.open(DEFAULT_COVER).resize((48, 48)))
     
     def getLyrics(self) -> str:
         try:
@@ -114,28 +126,60 @@ class SongInfo:
     def getEvaluation(self) -> float:
         # Campo da implementare, per ora 0.0
         return 0.0
+   
 
 
 class SongLibrary:
     songs: list[SongInfo] = []
+    currentSong: SongInfo = None
 
     @classmethod
     def addSong(cls, song: SongInfo) -> None:
         cls.songs.append(song)
     
-    #TODO: implementare rimozione canzone e salvataggio libreria su file
-
-    def saveLibrary(self, path: str) -> None:
-        with open(path, "w") as f:
-            json.dump([song.__dict__ for song in self.songs], f, indent=2)
+    @classmethod
+    def set_current_song(cls, song: SongInfo) -> None:
+        cls.currentSong = song  
+    
+    @classmethod
+    def get_current_song(cls) -> SongInfo:
+        return cls.currentSong  
 
     @classmethod
-    def addSongsFromDirectory(cls, directory: str) -> None:
+    def getNextSong(cls) -> SongInfo:
+        if not cls.songs or cls.currentSong is None:
+            return None
+        idx = cls.songs.index(cls.currentSong)
+        if idx + 1 < len(cls.songs):
+            cls.currentSong = cls.songs[idx + 1]
+            return cls.currentSong
+        return None
+
+    @classmethod
+    def getPreviousSong(cls) -> SongInfo:
+        if not cls.songs or cls.currentSong is None:
+            return None
+        idx = cls.songs.index(cls.currentSong)
+        if idx - 1 >= 0:
+            cls.currentSong = cls.songs[idx - 1]
+            return cls.currentSong
+        return None
+
+    @classmethod
+    def saveLibrary(cls, path: str) -> None:
+        with open(path, "w") as f:
+            json.dump([song.__dict__ for song in cls.songs], f, indent=2)
+
+    @classmethod
+    def addSongsFromDirectory(cls, directory: str) -> bool:
+        added = False
         for root, _, files in os.walk(directory):
             for file in files:
                 if any(file.lower().endswith(ext) for ext in musicExtensions):
                     song_path = os.path.join(root, file)
                     cls.addSong(SongInfo(song_path))
+                    added = True
+        return added
 
     @classmethod
     def removeSong(cls, song: SongInfo) -> None:
@@ -146,7 +190,13 @@ class SongLibrary:
         with open(path, "w") as f:
             json.dump([song.__dict__ for song in cls.songs], f, indent=2)
 
-# class Controller:
-#     #current song
-#     #playlist
-#     #save data
+class PathLibrary:
+    paths: list[str] = []
+
+    @classmethod
+    def addPath(cls, path: str) -> None:
+        cls.paths.append(path)
+    
+    @classmethod
+    def removePath(cls, path: str) -> None:
+        cls.paths.remove(path)
