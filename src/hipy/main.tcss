@@ -65,12 +65,14 @@ Song_element:hover {
 }
 
 #content {
-    width: 1fr;
+    width: 2fr;
     padding: 1;
     border: round $surface-lighten-2;
     align: center middle;
 }
-
+#header-area{
+    height: 2;
+}
 #preview {
     height: 1fr;
     content-align: center middle;

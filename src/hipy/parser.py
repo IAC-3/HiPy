@@ -123,6 +123,12 @@ class SongLibrary:
     def addSong(cls, song: SongInfo) -> None:
         cls.songs.append(song)
     
+    #TODO: implementare rimozione canzone e salvataggio libreria su file
+
+    def saveLibrary(self, path: str) -> None:
+        with open(path, "w") as f:
+            json.dump([song.__dict__ for song in self.songs], f, indent=2)
+
     @classmethod
     def addSongsFromDirectory(cls, directory: str) -> None:
         for root, _, files in os.walk(directory):
@@ -140,3 +146,7 @@ class SongLibrary:
         with open(path, "w") as f:
             json.dump([song.__dict__ for song in cls.songs], f, indent=2)
 
+# class Controller:
+#     #current song
+#     #playlist
+#     #save data

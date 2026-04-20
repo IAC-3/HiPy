@@ -1,7 +1,5 @@
 #song-info{
     width: 100%;
-    border: round $surface-lighten-2;
-    align: center middle;
 }
 
 #waveform {

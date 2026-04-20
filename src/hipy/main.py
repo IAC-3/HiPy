@@ -4,7 +4,7 @@ import io
 import pygame
 from collections.abc import Iterable
 from pathlib import Path
-from hipy.TUI.elements import SideBarSongElement, SideBar
+from hipy.TUI.elements import SideBarSongElement, SideBar, ToolBar
 
 from PIL import Image
 from rich_pixels import Pixels
@@ -29,10 +29,10 @@ class HiPyApp(App):
     def __init__(self) -> None:
         super().__init__()
         pygame.mixer.init()
-        self.currentSong = None
 
     def compose(self) -> ComposeResult:
-        # yield Header()
+        with Horizontal(id="header-area"):
+                yield ToolBar()
         with Horizontal(id="main-area"):
             with VerticalScroll(id="sidebar"):
                 yield SideBar()
@@ -50,7 +50,7 @@ class HiPyApp(App):
 
 
 def main() -> None: 
-    SongLibrary.addSongsFromDirectory("/Users/marcomattiuz/Music/Music/Media.localized/Music")
+    # SongLibrary.addSongsFromDirectory("/Users/marcomattiuz/Music/Music/Media.localized/Music")
  
 
 

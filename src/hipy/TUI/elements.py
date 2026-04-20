@@ -10,6 +10,22 @@ from hipy.parser import SongInfo, SongLibrary
 
 
 
+class ToolBar(Horizontal):
+    def compose(self):
+        yield Button("load folder", id="load-folder-btn", variant="primary", flat=True)
+        yield Button("save library", id="save-library-btn", variant="primary", flat=True)
+        yield Button("clear library", id="clear-library-btn", variant="primary", flat=True)
+    
+    # def on_button_pressed(self, event: Button.Pressed) -> None:
+    #     if event.button.id == "load-folder-btn":
+    #         self.app.push_screen(DirectoryPickerScreen())
+    #     elif event.button.id == "save-library-btn":
+    #         SongLibrary.saveLibrary("library.json")
+    #     elif event.button.id == "clear-library-btn":
+    #         SongLibrary.clearLibrary()
+    #         sidebar = self.app.query_one(SideBar)
+    #         sidebar.refreshList()
+
 class SideBar(Vertical):
     def compose(self):
         yield ListView(
@@ -42,6 +58,7 @@ class SideBarSongElement(ListItem):
 class SongView(Vertical):
     def __init__(self, songInfo: SongInfo, **kwargs):
         self.songInfo = songInfo
+        self.log(f"Creating SongView for {self.songInfo.path}")
         super().__init__(**kwargs)
     
     def compose(self):
@@ -49,22 +66,13 @@ class SongView(Vertical):
         if cover:
             yield Static(cover, id="cover-art")
         yield Label(self.songInfo.getGeneralInfo().get("title", "Unknown Title"))
-        yield Label(self.songInfo.getGeneralInfo().get("Performer", "Unknown Artist"))
+        yield Label(self.songInfo.getGeneralInfo().get("performer", "Unknown Artist"))
         yield Label(self.songInfo.getGeneralInfo().get("album", "Unknown Album"))
-        yield PlotextPlot(id="waveform")
+        # yield Label(self.songInfo.getAudioInfo().get("duration", "Unknown Duration"))
         yield Button("▶ Play", id="play-btn")
         yield Button("⏹ Stop", id="stop-btn")
 
-    def on_mount(self):
-        plot_widget = self.query_one("#waveform", PlotextPlot)
-        plt = plot_widget.plt
-        plt.clear_data()
-        plt.clear_figure()
-        plt.theme("dark")
-        waveform = self.songInfo.getWaveform()
-        plt.scatter(list(range(len(waveform))), waveform)
-        plt.ylim(0, 1)
-        plot_widget.refresh()
+  
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "play-btn":
