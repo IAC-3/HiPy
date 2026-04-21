@@ -11,6 +11,7 @@ from mutagen.id3 import ID3
 from mutagen.mp3 import MP3
 import librosa
 import numpy as np
+from tinydb import TinyDB
 
 DEFAULT_COVER = Path(__file__).parent.parent.parent / "assets" / "sample.png"
 
@@ -167,8 +168,25 @@ class SongLibrary:
 
     @classmethod
     def saveLibrary(cls, path: str) -> None:
-        with open(path, "w") as f:
-            json.dump([song.__dict__ for song in cls.songs], f, indent=2)
+        db_path = Path(path)
+        if db_path.exists():
+            try:
+                with open(db_path, "r", encoding="utf-8") as f:
+                    existing = json.load(f)
+                if not isinstance(existing, dict):
+                    with open(db_path, "w", encoding="utf-8") as f:
+                        json.dump({}, f)
+            except Exception:
+                with open(db_path, "w", encoding="utf-8") as f:
+                    json.dump({}, f)
+
+        db = TinyDB(path)
+        songs_table = db.table("songs")
+        songs_table.truncate()
+        songs_table.insert_multiple(
+            [{"path": song.path, "metadata": song.metadata} for song in cls.songs]
+        )
+        db.close()
 
     @classmethod
     def addSongsFromDirectory(cls, directory: str) -> bool:
@@ -184,11 +202,6 @@ class SongLibrary:
     @classmethod
     def removeSong(cls, song: SongInfo) -> None:
         cls.songs.remove(song)
-
-    @classmethod
-    def saveLibrary(cls, path: str) -> None:
-        with open(path, "w") as f:
-            json.dump([song.__dict__ for song in cls.songs], f, indent=2)
 
 class PathLibrary:
     paths: list[str] = []
